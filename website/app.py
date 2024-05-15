@@ -78,6 +78,8 @@ def load_user(id):
 def home():
     return render_template("home.html",user=current_user)
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method=='POST':

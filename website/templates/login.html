@@ -4,80 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='loginsignupstyle.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loginsignupstyle.css') }}">
     <script src="https://kit.fontawesome.com/0e7cae0c06.js" crossorigin="anonymous"></script>   
-    <title>login</title>
+    <title>Login</title>
 </head>
 <body>
     <div class="container1">
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-            messages %} {% for category, message in messages %} {% if category ==
-            'error' %}
-            <div class="alert alert-danger alter-dismissable fade show" role="alert">
-              {{ message }}
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            {% else %}
-            <div class="alert alert-success alter-dismissable fade show" role="alert">
-              {{ message }}
-              <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            {% endif %} {% endfor %} {% endif %} {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %} 
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'error' %}
+                        <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success alter-dismissable fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
         <div class="form-box1">
             <h1 id="title">Login</h1>
             <form action="" method="post">
                 <div class="input-group1">
-
-                    <!-- <div class="input-field" id="usernamefield">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Username" name="username" id="username">
-                    </div> -->
-
                     <div class="input-field1">
                         <i class="fa-solid fa-envelope"></i>
-                        <input type="email" placeholder="Email" name="email" id="email">
+                        <input type="email" placeholder="Email" name="email" id="email" value="{{ saved_email }}">
                     </div>
 
                     <div class="input-field1">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Password" name="password" id="password">
+                        <input type="password" placeholder="Password" name="password" id="password" value="{{ saved_password }}">
                     </div>
+
+                    <div class="remember_password">
+                        <input type="checkbox" name="remember" id="remember" {% if saved_email %} checked {% endif %}>
+                        <label for="remember">Remember Password</label>
+                    </div>
+                    
                     <div><p><a href="#">Forgot password?</a></p></div>
-                    <div><p><a href="/signup">New user?</a></p></div>
+                    <div><p><a href="{{ url_for('signup') }}">New user?</a></p></div>
                 </div>
                 <div class="btn-field1">
                     <button type="submit" id="loginbtn"> Login</button>
-
                 </div>
             </form>
         </div>
     </div>
-    <!-- <script>
-        let signupbtn=document.getElementById("signupbtn");
-        let loginbtn=document.getElementById("loginbtn");
-        let title=document.getElementById("title");
-        let usernamefield=document.getElementById("usernamefield");
 
-        loginbtn.onclick=function(){
-            usernamefield.style.maxHeight="0";
-            title.innerHTML="Login";
-            signupbtn.classList.add("disable");
-            loginbtn.classList.remove("disable");
-        }
+    <script>
+        // Retrieve saved email and password from local storage
+        var saved_email = localStorage.getItem("saved_email");
+        var saved_password = localStorage.getItem("saved_password");
 
-        signupbtn.onclick=function(){
-            usernamefield.style.maxHeight="60px";
-            title.innerHTML="Sign Up";
-            signupbtn.classList.remove("disable");
-            loginbtn.classList.add("disable");
-        }
+        // Populate input fields with saved email and password
+        document.getElementById("email").value = saved_email;
+        document.getElementById("password").value = saved_password;
 
-    </script> -->
+        // Save email and password to local storage when 'Remember Me' checkbox is checked
+        document.getElementById("remember").addEventListener("change", function() {
+            if (this.checked) {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                localStorage.setItem("saved_email", email);
+                localStorage.setItem("saved_password", password);
+            } else {
+                localStorage.removeItem("saved_email");
+                localStorage.removeItem("saved_password");
+            }
+        });
+    </script>
 </body>
 </html>
